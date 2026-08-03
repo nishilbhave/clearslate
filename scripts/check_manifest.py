@@ -37,7 +37,9 @@ def check_plant(plant: dict, pages: dict[int, str]) -> tuple[bool, str]:
         p for p in sorted(pages) if p not in expected_pages and page_has_alias(pages[p], aliases)
     ]
     if len(outside_hits) > 1:
-        return False, f"found on {len(outside_hits)} unexpected page(s) {outside_hits} (max 1 allowed)"
+        return False, (
+            f"found on {len(outside_hits)} unexpected page(s) {outside_hits} (max 1 allowed)"
+        )
 
     return True, ""
 

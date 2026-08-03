@@ -3,6 +3,7 @@ from pathlib import Path
 
 import pytest
 
+import clearslate.parsing.pdf as pdf_module
 from clearslate.errors import ParserError
 from clearslate.parsing.pdf import parse_pdf
 
@@ -60,3 +61,38 @@ def test_empty_pdf_raises_low_text_pdf() -> None:
 
     assert exc_info.value.code == "low_text_pdf"
     assert "little extractable text" in exc_info.value.message
+
+
+def test_page_extract_text_exception_raises_low_text_pdf(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A page whose extract_text() raises maps to a low_text_pdf ParserError.
+
+    Uses a monkeypatched fake pdfplumber pdf/page pair (no malformed PDF bytes needed)
+    so we can force an exception mid-page-iteration and verify the file handle is
+    still closed via the finally block.
+    """
+
+    class FakePage:
+        def extract_text(self) -> str:
+            raise ValueError("simulated extraction failure")
+
+    class FakePdf:
+        def __init__(self) -> None:
+            self.pages = [FakePage()]
+            self.closed = False
+
+        def close(self) -> None:
+            self.closed = True
+
+    fake_pdf = FakePdf()
+
+    def fake_open(_buffer: object) -> FakePdf:
+        return fake_pdf
+
+    monkeypatch.setattr(pdf_module.pdfplumber, "open", fake_open)
+
+    with pytest.raises(ParserError) as exc_info:
+        parse_pdf(b"irrelevant-bytes")
+
+    assert exc_info.value.code == "low_text_pdf"
+    assert "little extractable text" in exc_info.value.message
+    assert fake_pdf.closed is True

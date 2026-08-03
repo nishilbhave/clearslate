@@ -1,4 +1,7 @@
-"""Query a deployed Agent Engine agent: uv run python scripts/smoke_agent_engine.py <id-or-resource-name> [message]"""
+"""Query a deployed Agent Engine agent.
+
+Usage: uv run python scripts/smoke_agent_engine.py <id-or-resource-name> [message]
+"""
 import os
 import sys
 

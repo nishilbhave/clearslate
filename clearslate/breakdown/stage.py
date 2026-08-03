@@ -130,7 +130,9 @@ async def run_breakdown(
     `BreakdownStageError` naming every failed chunk. Any other exception type propagates
     unchanged (a bug should never be silently repackaged as a stage error).
     """
-    chunks = chunk_pages(parsed.pages, chunk_size=settings.chunk_pages, overlap=settings.chunk_overlap)
+    chunks = chunk_pages(
+        parsed.pages, chunk_size=settings.chunk_pages, overlap=settings.chunk_overlap
+    )
     semaphore = asyncio.Semaphore(concurrency)
 
     async def _run(chunk: Chunk) -> tuple[ChunkExtraction, bool]:

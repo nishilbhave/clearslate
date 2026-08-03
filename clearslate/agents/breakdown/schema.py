@@ -12,7 +12,9 @@ class ExtractedElement(BaseModel):
     text: str = Field(description="The element exactly as written in the script")
     pages: list[int] = Field(description="Page numbers from [PAGE n] markers where it appears")
     scene: str | None = Field(default=None, description="Nearest preceding scene heading")
-    context_snippet: str = Field(max_length=300, description="Verbatim line(s) of context, <=300 chars")
+    context_snippet: str = Field(
+        max_length=300, description="Verbatim line(s) of context, <=300 chars"
+    )
 
 class ChunkExtraction(BaseModel):
     elements: list[ExtractedElement]

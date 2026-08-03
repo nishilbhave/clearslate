@@ -14,13 +14,13 @@ def make_fixture_pdf() -> None:
     pdf.set_font("Arial", size=12)
     pdf.cell(0, 10, "PAGE-ONE-MARKER", ln=True)
     pdf.cell(0, 10, "INT. DINER - DAY", ln=True)
-    for i in range(5):
+    for _ in range(5):
         pdf.cell(0, 10, "Filler line for extraction.", ln=True)
 
     # Page 2
     pdf.add_page()
     pdf.cell(0, 10, "PAGE-TWO-MARKER", ln=True)
-    for i in range(5):
+    for _ in range(5):
         pdf.cell(0, 10, "Filler line for extraction.", ln=True)
 
     # Write to fixtures directory

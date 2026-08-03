@@ -33,6 +33,9 @@ markers = ["live: calls real GCP APIs; run explicitly with: uv run pytest -m liv
 line-length = 100
 target-version = "py312"
 
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
 [tool.ruff.lint.flake8-bugbear]
 # FastAPI's dependency-injection defaults (File(...), Form(...), Depends(...)) are the
 # idiomatic pattern for declaring request parameters; B008 otherwise flags every route.

@@ -52,43 +52,53 @@ def parse_pdf(content: bytes) -> ParsedScript:
     Raises:
         ParserError: If PDF is low-text, empty, or otherwise invalid
     """
+    low_text_error = ParserError(
+        "low_text_pdf",
+        "This PDF appears to be scanned or has little extractable text — "
+        "try pasting the text instead.",
+    )
+
     try:
         pdf = pdfplumber.open(io.BytesIO(content))
     except Exception as e:
-        raise ParserError("low_text_pdf", "This PDF appears to be scanned or has little extractable text — try pasting the text instead.") from e
+        raise low_text_error from e
 
-    # Check if PDF is empty
-    if len(pdf.pages) == 0:
-        raise ParserError("low_text_pdf", "This PDF appears to be scanned or has little extractable text — try pasting the text instead.")
+    try:
+        # Check if PDF is empty
+        if len(pdf.pages) == 0:
+            raise low_text_error
 
-    # Extract text from each page and check low-text ratio
-    pages: list[PageText] = []
-    low_text_count = 0
+        # Extract text from each page and check low-text ratio
+        pages: list[PageText] = []
+        low_text_count = 0
 
-    for page_num, page in enumerate(pdf.pages, start=1):
-        text = page.extract_text() or ""
-        pages.append(PageText(page=page_num, text=text))
+        try:
+            for page_num, page in enumerate(pdf.pages, start=1):
+                text = page.extract_text() or ""
+                pages.append(PageText(page=page_num, text=text))
 
-        # Check if page has low text
-        if len(text.strip()) < LOW_TEXT_CHARS:
-            low_text_count += 1
+                # Check if page has low text
+                if len(text.strip()) < LOW_TEXT_CHARS:
+                    low_text_count += 1
+        except Exception as e:
+            raise low_text_error from e
 
-    # Check low-text ratio
-    if len(pages) > 0:
-        low_text_ratio = low_text_count / len(pages)
-        if low_text_ratio > LOW_TEXT_PAGE_RATIO:
-            raise ParserError("low_text_pdf", "This PDF appears to be scanned or has little extractable text — try pasting the text instead.")
+        # Check low-text ratio
+        if len(pages) > 0:
+            low_text_ratio = low_text_count / len(pages)
+            if low_text_ratio > LOW_TEXT_PAGE_RATIO:
+                raise low_text_error
 
-    # Extract scene headings
-    scene_headings: list[tuple[int, str]] = []
-    for page in pages:
-        lines = page.text.split("\n")
-        for line in lines:
-            if _is_scene_heading(line):
-                heading_text = _get_heading_text(line)
-                scene_headings.append((page.page, heading_text))
-
-    pdf.close()
+        # Extract scene headings
+        scene_headings: list[tuple[int, str]] = []
+        for page in pages:
+            lines = page.text.split("\n")
+            for line in lines:
+                if _is_scene_heading(line):
+                    heading_text = _get_heading_text(line)
+                    scene_headings.append((page.page, heading_text))
+    finally:
+        pdf.close()
 
     return ParsedScript(
         source_format="pdf",

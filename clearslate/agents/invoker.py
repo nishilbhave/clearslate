@@ -75,7 +75,10 @@ class AgentEngineInvoker:
     def _resolved_name(self) -> str:
         if self._engine_id.startswith("projects/"):
             return self._engine_id
-        return f"projects/{self._project}/locations/{self._location}/reasoningEngines/{self._engine_id}"
+        return (
+            f"projects/{self._project}/locations/{self._location}"
+            f"/reasoningEngines/{self._engine_id}"
+        )
 
     def _get_agent(self):
         if self._agent is None:

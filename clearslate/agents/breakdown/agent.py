@@ -28,8 +28,8 @@ From the screenplay excerpt, extract EVERY instance of these 9 categories:
 Rules:
 - pages MUST come only from the [PAGE n] markers in the excerpt; never guess.
 - text is the surface form exactly as written; context_snippet is a verbatim quote.
-- Skip unnamed generics ("the bar", "a nurse"). Include every distinct named element once per excerpt,
-  with all pages where it appears in this excerpt.
+- Skip unnamed generics ("the bar", "a nurse"). Include every distinct named element once
+  per excerpt, with all pages where it appears in this excerpt.
 - Output JSON matching the schema. Nothing else."""
 
 # Env-overridable so an Agent Engine deploy or eval run can pin a specific model

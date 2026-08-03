@@ -5,13 +5,13 @@ Spec 3.3 element record, 9-category enum, run state machine.
 from __future__ import annotations
 
 from datetime import UTC, datetime
-from enum import Enum
+from enum import StrEnum
 from typing import Literal
 
 from pydantic import BaseModel, Field
 
 
-class ElementCategory(str, Enum):
+class ElementCategory(StrEnum):
     CHARACTER_NAME = "character_name"
     BUSINESS_ORG = "business_org"
     LOCATION_ADDRESS = "location_address"
@@ -23,7 +23,7 @@ class ElementCategory(str, Enum):
     VEHICLE_IDENTIFIER = "vehicle_identifier"
 
 
-class ElementStatus(str, Enum):
+class ElementStatus(StrEnum):
     PENDING = "pending"
     RESEARCHING = "researching"
     RESEARCHED = "researched"
@@ -31,7 +31,7 @@ class ElementStatus(str, Enum):
     GRADED = "graded"
 
 
-class Grade(str, Enum):
+class Grade(StrEnum):
     CLEAR = "CLEAR"
     CAUTION = "CAUTION"
     CONFLICT = "CONFLICT"
@@ -81,7 +81,7 @@ class ParsedScript(BaseModel):
     scene_headings: list[tuple[int, str]] = Field(default_factory=list)
 
 
-class RunState(str, Enum):
+class RunState(StrEnum):
     PENDING = "PENDING"
     BREAKDOWN = "BREAKDOWN"
     AWAITING_START = "AWAITING_START"

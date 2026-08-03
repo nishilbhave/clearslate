@@ -69,7 +69,9 @@ class TestRetryPath:
     async def test_bad_enum_then_valid_retries_once(self):
         parsed = make_parsed(7)
         bad_response = extraction_json([element_dict(category="villain", text="Bob", pages=[1])])
-        good_response = extraction_json([element_dict(category="character_name", text="Bob", pages=[1])])
+        good_response = extraction_json(
+            [element_dict(category="character_name", text="Bob", pages=[1])]
+        )
         invoker = QueuedInvoker([bad_response, good_response])
 
         result = await run_breakdown(parsed, invoker, concurrency=1)
@@ -84,7 +86,9 @@ class TestRetryPath:
         chunks = chunk_pages(make_pages(7), chunk_size=12, overlap=2)
         chunk = chunks[0]
         bad_response = "not json at all"
-        good_response = extraction_json([element_dict(category="character_name", text="Bob", pages=[1])])
+        good_response = extraction_json(
+            [element_dict(category="character_name", text="Bob", pages=[1])]
+        )
         invoker = QueuedInvoker([bad_response, good_response])
 
         extraction = await extract_chunk(invoker, chunk)

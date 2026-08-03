@@ -39,18 +39,21 @@ She kicks a pallet in frustration, then immediately regrets it and checks her bo
 WREN (CONT'D)
 Great. Steel-toe, meet actual toe.
 
-She limps to the vending machine bolted to the wall, cracks open a can of Red Bull, drinks half of it in one go.
+She limps to the vending machine bolted to the wall, cracks \
+open a can of Red Bull, drinks half of it in one go.
 
 WREN (CONT'D)
 (to herself)
-Okay. Diagnostics. Manifest says forty crates. I count thirty-one. Somebody's doing math with their feelings again.
+Okay. Diagnostics. Manifest says forty crates. I count \
+thirty-one. Somebody's doing math with their feelings again.
 
 Headlights sweep across the loading dock. A truck finally backs in, brakes hissing in the wet air.
 
 WREN (CONT'D)
 About time.
 
-She sets down the can and grabs her handheld scanner, walking out toward the truck as the rain picks up.
+She sets down the can and grabs her handheld scanner, \
+walking out toward the truck as the rain picks up.
 
 The dock door rattles upward on its chain, flooding the bay with white headlight glare.
 
@@ -60,7 +63,8 @@ Back it up two more feet, you're blocking the ramp!
 
 INT. LOADING DOCK - CONTINUOUS
 
-The truck driver climbs down, waving an apology. Wren waves back, already scanning boxes with the handheld reader.
+The truck driver climbs down, waving an apology. Wren waves \
+back, already scanning boxes with the handheld reader.
 
 WREN
 Just get it inside before the rain finds the good stuff.
@@ -70,7 +74,8 @@ She scans another crate. The reader beeps green and she nods to herself.
 WREN (CONT'D)
 There we go. One thirty-one down, nine to go.
 
-The driver hands her a clipboard to sign. She scrawls her initials without looking up from the scanner.
+The driver hands her a clipboard to sign. She scrawls \
+her initials without looking up from the scanner.
 
 WREN (CONT'D)
 Tell dispatch Sysco owes us an apology and a discount.
@@ -81,7 +86,8 @@ I just drive the truck.
 WREN
 Lucky you.
 
-She waves the last pallet through, the dock door rattling back down behind it, and finally lets herself breathe.
+She waves the last pallet through, the dock door rattling \
+back down behind it, and finally lets herself breathe.
 """
 
 

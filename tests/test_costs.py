@@ -3,6 +3,8 @@ Tests for cost estimation module.
 Spec 1.10: page heuristic + per-category element pricing under spec caps.
 """
 from clearslate.costs import (
+    GEMINI_FLASH_USD_PER_M_IN,
+    GEMINI_FLASH_USD_PER_M_OUT,
     SEARCH_PRICE_USD,
     TASK_BASE_PRICE_USD,
     estimate_cost,
@@ -24,7 +26,9 @@ def test_estimate_cost_pinned_numbers():
     estimate = estimate_cost(counts, page_count)
 
     # Verify pinned search_requests
-    assert estimate.search_requests == 83, f"Expected search_requests==83, got {estimate.search_requests}"
+    assert estimate.search_requests == 83, (
+        f"Expected search_requests==83, got {estimate.search_requests}"
+    )
 
     # Verify pinned task_runs
     assert estimate.task_runs == 6, f"Expected task_runs==6, got {estimate.task_runs}"
@@ -34,10 +38,16 @@ def test_estimate_cost_pinned_numbers():
     # task_runs = min(ceil(30*0.15 + 10*0.10 + 10*0.0), 40) = min(ceil(4.5 + 1.0), 40) = 6
     # gemini_in = 100 * 350 = 35000 tokens
     # gemini_out = 0.6 * 35000 = 21000 tokens
-    # gemini_usd = round((35000*0.30 + 21000*2.50) / 1_000_000, 4)
+    # gemini_usd = round(
+    #     (35000*GEMINI_FLASH_USD_PER_M_IN + 21000*GEMINI_FLASH_USD_PER_M_OUT) / 1_000_000, 4
+    # )
     gemini_in = 100 * 350
     gemini_out = 0.6 * gemini_in
-    expected_gemini_usd = round((gemini_in * 0.30 + gemini_out * 2.50) / 1_000_000, 4)
+    expected_gemini_usd = round(
+        (gemini_in * GEMINI_FLASH_USD_PER_M_IN + gemini_out * GEMINI_FLASH_USD_PER_M_OUT)
+        / 1_000_000,
+        4,
+    )
     # parallel_usd = round(83*SEARCH_PRICE_USD + 6*TASK_BASE_PRICE_USD, 4)
     expected_parallel_usd = round(83 * SEARCH_PRICE_USD + 6 * TASK_BASE_PRICE_USD, 4)
     expected_total_usd = round(expected_gemini_usd + expected_parallel_usd, 4)

@@ -60,7 +60,8 @@ def test_no_args_raises_empty_input() -> None:
 def test_131_page_paste_raises_too_long() -> None:
     """Test that exceeding 130 page limit raises too_long error."""
     # Create text that will result in > 130 pages
-    # 131 pages = 131 * 55 = 7205 lines, but splitting adds empty string so we need to account for that
+    # 131 pages = 131 * 55 = 7205 lines, but splitting adds empty string so we need to
+    # account for that
     long_text = "line\n" * (131 * 55)
 
     with pytest.raises(ParserError) as exc_info:

@@ -14,7 +14,8 @@ ClearSlate automates script clearance. Upload a screenplay. Get back an itemized
 
 ## Architecture
 
-- **Web + Worker**: Cloud Run services (async task queue via Firestore)
+- **Web**: a single Cloud Run service (FastAPI + built frontend) with an in-process async
+  worker and in-memory run state (Phase 2: Firestore-backed state + research swarm)
 - **ADK Agents on Vertex AI Agent Engine**: Breakdown, research, and synthesis agents
 - **Vertex AI Search**: "Rulebook" data store for industry guidelines
 - **Parallel Search + Task APIs**: Cited web research with real-time sources
@@ -37,7 +38,8 @@ Both modes speak the same `AgentInvoker` protocol, so the API/worker code is ide
 
 ## GCP bootstrap
 
-After Task 0.1 (see `.superpowers/sdd/2026-08-02-clearslate-hackathon-spec.md`):
+Provisions the GCP project, billing link, required APIs, Firestore database, GCS buckets,
+and the `clearslate-run` service account/IAM bindings:
 
 ```bash
 PROJECT_ID=your-gcp-project-id \
@@ -45,7 +47,28 @@ BILLING_ACCOUNT_ID=your-billing-account-id \
 scripts/bootstrap_gcp.sh
 ```
 
-The web app (API + built frontend, containerized via the root `Dockerfile`) deploys to Cloud Run with `gcloud run deploy clearslate-web --source . --project=$PROJECT_ID --region=us-central1 --service-account=clearslate-run@$PROJECT_ID.iam.gserviceaccount.com --set-secrets=PARALLEL_API_KEY=parallel-api-key:latest` (see `.superpowers/sdd/.../task-1.15-brief.md` for the full flag set). Run state is in-memory until Phase 2 adds Firestore persistence — a service restart loses in-flight runs (acceptable for Phase 1).
+After bootstrapping, add your Parallel API key to Secret Manager (the script creates the
+empty secret; it does not populate it):
+
+```bash
+printf '%s' "$YOUR_PARALLEL_API_KEY" | \
+  gcloud secrets versions add parallel-api-key --data-file=- --project="$PROJECT_ID"
+```
+
+The web app (API + built frontend, containerized via the root `Dockerfile`) deploys to
+Cloud Run with:
+
+```bash
+gcloud run deploy clearslate-web --source . --project="$PROJECT_ID" --region=us-central1 \
+  --allow-unauthenticated --no-cpu-throttling --memory=1Gi --max-instances=2 \
+  --service-account="clearslate-run@$PROJECT_ID.iam.gserviceaccount.com" \
+  --set-env-vars=GOOGLE_GENAI_USE_VERTEXAI=TRUE,GOOGLE_CLOUD_PROJECT="$PROJECT_ID",GOOGLE_CLOUD_LOCATION=us-central1,CLEARSLATE_AGENT_RUNTIME=local \
+  --set-secrets=PARALLEL_API_KEY=parallel-api-key:latest
+```
+
+(`--no-cpu-throttling` keeps the background breakdown task alive after the request returns
+202; `--set-secrets` mounts the key created above.) Run state is in-memory until Phase 2 adds
+Firestore persistence — a service restart loses in-flight runs (acceptable for Phase 1).
 
 ## Disclaimer
 

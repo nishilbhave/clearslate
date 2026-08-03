@@ -13,10 +13,11 @@ from clearslate.models import CostEstimate, ElementCategory
 
 # Constants per spec 1.10
 ELEMENTS_PER_PAGE = 1.6
-SEARCH_PRICE_USD = 0.002  # blended: ~80% turbo @$0.001 + ~20% advanced @$0.005 (live prices verified 2026-08-03)
+# Blended: ~80% turbo @$0.001 + ~20% advanced @$0.005 (live prices verified 2026-08-03)
+SEARCH_PRICE_USD = 0.002
 TASK_BASE_PRICE_USD = 0.01  # live: base processor $10/1K runs (verified 2026-08-03)
-GEMINI_FLASH_USD_PER_M_IN = 0.30
-GEMINI_FLASH_USD_PER_M_OUT = 2.50
+GEMINI_FLASH_USD_PER_M_IN = 1.50  # gemini-3.6-flash, verified 2026-08-03
+GEMINI_FLASH_USD_PER_M_OUT = 7.50  # gemini-3.6-flash, verified 2026-08-03
 TOKENS_PER_PAGE = 350
 
 # Search requests per element by category

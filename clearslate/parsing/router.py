@@ -3,7 +3,7 @@ import re
 
 from clearslate.config import settings
 from clearslate.errors import ParserError
-from clearslate.models import ParsedScript
+from clearslate.models import PageText, ParsedScript
 from clearslate.parsing.fountain import parse_fountain
 from clearslate.parsing.pdf import parse_pdf
 
@@ -33,7 +33,7 @@ def _sniff_format(text: str) -> str:
     Otherwise returns "text".
     """
     lines = text.split("\n")
-    for i, line in enumerate(lines[:100]):
+    for line in lines[:100]:
         if _is_scene_heading(line):
             return "fountain"
 
@@ -56,7 +56,7 @@ def _parse_plain_text(text: str) -> ParsedScript:
         page_text = "\n".join(page_lines)
         page_number = (page_idx // LINES_PER_PAGE) + 1  # 1-indexed
 
-        pages.append(__import__("clearslate.models", fromlist=["PageText"]).PageText(page=page_number, text=page_text))
+        pages.append(PageText(page=page_number, text=page_text))
 
     return ParsedScript(
         source_format="text",
