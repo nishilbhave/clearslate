@@ -39,6 +39,10 @@ def dedupe_elements(raw: list[RawExtractedElement]) -> list[Element]:
     - Generates sequential IDs (el_0001, el_0002, ...)
     - Sorts output by (min(pages), category.value)
 
+    Filtering:
+    - Elements with empty pages list are dropped (no page attribution)
+    - Elements with empty normalized_text are dropped (noise/garbage)
+
     Args:
         raw: List of RawExtractedElement objects from various chunks
 
@@ -48,13 +52,22 @@ def dedupe_elements(raw: list[RawExtractedElement]) -> list[Element]:
     if not raw:
         return []
 
+    # Filter 1: Drop elements with empty pages list (Finding 1)
+    raw_filtered = [e for e in raw if e.pages]
+
+    if not raw_filtered:
+        return []
+
     # Group by (category, normalized_text)
     groups: defaultdict[tuple[ElementCategory, str], list[RawExtractedElement]] = (
         defaultdict(list)
     )
 
-    for element in raw:
+    for element in raw_filtered:
         normalized = normalize_text(element.text, element.category)
+        # Filter 2: Skip empty normalized_text (Finding 3)
+        if not normalized:
+            continue
         key = (element.category, normalized)
         groups[key].append(element)
 

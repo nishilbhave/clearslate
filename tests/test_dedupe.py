@@ -357,3 +357,165 @@ class TestDedupeElementsEmpty:
         assert len(result) == 1
         assert result[0].id == "el_0001"
         assert result[0].status.value == "pending"  # Default status
+
+
+class TestDedupeElementsFinding1EmptyPages:
+    """Tests for Finding 1: Empty pages list handling."""
+
+    def test_empty_pages_mixed_with_valid(self):
+        """Element with pages=[] mixed into valid batch → batch succeeds, empty-pages dropped."""
+        raw = [
+            RawExtractedElement(
+                category=ElementCategory.CHARACTER_NAME,
+                text="John",
+                pages=[],  # Empty pages - should be dropped
+                scene=None,
+                context_snippet="John (no page info)",
+                chunk_index=0,
+            ),
+            RawExtractedElement(
+                category=ElementCategory.CHARACTER_NAME,
+                text="John",
+                pages=[5],  # Valid pages
+                scene=None,
+                context_snippet="John on page 5",
+                chunk_index=1,
+            ),
+        ]
+        result = dedupe_elements(raw)
+        # Should only have one element (the one with pages)
+        assert len(result) == 1
+        assert result[0].pages == [5]
+        assert result[0].id == "el_0001"
+
+    def test_all_empty_pages(self):
+        """All empty pages input → returns []."""
+        raw = [
+            RawExtractedElement(
+                category=ElementCategory.CHARACTER_NAME,
+                text="John",
+                pages=[],
+                scene=None,
+                context_snippet="John",
+                chunk_index=0,
+            ),
+            RawExtractedElement(
+                category=ElementCategory.CHARACTER_NAME,
+                text="Jane",
+                pages=[],
+                scene=None,
+                context_snippet="Jane",
+                chunk_index=1,
+            ),
+        ]
+        result = dedupe_elements(raw)
+        assert result == []
+
+    def test_empty_pages_does_not_crash(self):
+        """Empty pages should not crash with ValueError on min()."""
+        raw = [
+            RawExtractedElement(
+                category=ElementCategory.CHARACTER_NAME,
+                text="John",
+                pages=[],
+                scene=None,
+                context_snippet="John",
+                chunk_index=0,
+            ),
+        ]
+        # Should not raise ValueError
+        result = dedupe_elements(raw)
+        assert result == []
+
+
+class TestDedupeElementsFinding3EmptyNormalizedText:
+    """Tests for Finding 3: Empty normalized_text (punctuation-only) handling."""
+
+    def test_punctuation_only_dropped(self):
+        """Punctuation-only text normalizes to empty string → dropped."""
+        raw = [
+            RawExtractedElement(
+                category=ElementCategory.CHARACTER_NAME,
+                text="...",
+                pages=[5],
+                scene=None,
+                context_snippet="Just dots",
+                chunk_index=0,
+            ),
+        ]
+        result = dedupe_elements(raw)
+        # Punctuation-only elements should be dropped
+        assert result == []
+
+    def test_exclamation_only_dropped(self):
+        """Exclamation marks only → dropped."""
+        raw = [
+            RawExtractedElement(
+                category=ElementCategory.ON_SCREEN_TEXT,
+                text="!!!",
+                pages=[10],
+                scene=None,
+                context_snippet="Exclamations",
+                chunk_index=0,
+            ),
+        ]
+        result = dedupe_elements(raw)
+        assert result == []
+
+    def test_mixed_garbage_and_real_elements(self):
+        """Batch mixing punctuation-only + real elements → keeps only real ones."""
+        raw = [
+            RawExtractedElement(
+                category=ElementCategory.CHARACTER_NAME,
+                text="...",  # Will normalize to empty
+                pages=[1],
+                scene=None,
+                context_snippet="Garbage",
+                chunk_index=0,
+            ),
+            RawExtractedElement(
+                category=ElementCategory.CHARACTER_NAME,
+                text="John",  # Real element
+                pages=[5],
+                scene=None,
+                context_snippet="John",
+                chunk_index=1,
+            ),
+            RawExtractedElement(
+                category=ElementCategory.CHARACTER_NAME,
+                text="!!!",  # Will normalize to empty
+                pages=[10],
+                scene=None,
+                context_snippet="Garbage",
+                chunk_index=2,
+            ),
+        ]
+        result = dedupe_elements(raw)
+        # Should only have one element (John)
+        assert len(result) == 1
+        assert result[0].text == "John"
+        assert result[0].id == "el_0001"
+
+    def test_punctuation_only_different_categories(self):
+        """Two punctuation-only elements with different categories → both dropped."""
+        raw = [
+            RawExtractedElement(
+                category=ElementCategory.CHARACTER_NAME,
+                text="...",
+                pages=[1],
+                scene=None,
+                context_snippet="Dots",
+                chunk_index=0,
+            ),
+            RawExtractedElement(
+                category=ElementCategory.BUSINESS_ORG,
+                text="!!!",
+                pages=[1],
+                scene=None,
+                context_snippet="Exclamations",
+                chunk_index=0,
+            ),
+        ]
+        result = dedupe_elements(raw)
+        # Both should be dropped (normalize to empty or whitespace-only)
+        assert result == []

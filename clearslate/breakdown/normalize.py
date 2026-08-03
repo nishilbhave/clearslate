@@ -34,33 +34,46 @@ def _normalize_phone_url_email(text: str) -> str:
     """
     Normalize PHONE_URL_EMAIL category.
 
-    For emails/URLs (contains "@" or looks like domain with "."):
-    - lowercase, strip whitespace, strip single trailing "/"
+    Strategy: if text contains letters, treat as URL/email (de-space and normalize);
+    if text contains NO letters, treat as phone (digits only).
 
-    For phones: strip all non-digit characters -> digits only
+    Exception: if text looks like a phone with extension (e.g., "415-867-5309 ext. 123"),
+    treat as phone despite having letters.
+
+    This handles PDF extraction artifacts like "Example . com" correctly.
     """
     text = text.strip()
 
-    # Check if it's an email or URL
-    is_email = "@" in text
-    is_url = text.startswith(("http://", "https://"))
+    # If text contains no letters, it's a phone number
+    if not any(c.isalpha() for c in text):
+        # Phone: digits only
+        return re.sub(r"\D", "", text)
 
-    # Domain detection: has dot with letters around it, no spaces after strip
+    # Text contains letters, so treat as URL/email
+    # De-space for robust domain detection
+    de_spaced = text.replace(" ", "")
+
+    # Check if it's an email or URL
+    is_email = "@" in de_spaced
+    is_url = de_spaced.startswith(("http://", "https://"))
+
+    # Domain detection: has dot with letters around it
     is_domain = False
-    if "." in text and " " not in text:
-        # Check if there are letters around a dot
-        parts = text.split(".")
+    if "." in de_spaced and not de_spaced[0].isdigit():
+        # Domains typically start with a letter, not a digit
+        # This filters out cases like "415-867-5309ext.123"
+        parts = de_spaced.split(".")
         if len(parts) >= 2:
             # Check if any part has letters (typical for domain names)
             is_domain = any(any(c.isalpha() for c in part) for part in parts)
 
     if is_email or is_url or is_domain:
-        # Email or URL: lowercase, strip whitespace, strip single trailing "/"
-        normalized = text.lower().replace(" ", "")
+        # Email or URL: lowercase, strip single trailing "/"
+        normalized = de_spaced.lower()
         normalized = normalized.removesuffix("/")
         return normalized
     else:
-        # Phone: digits only
+        # Fallback: if it has letters but doesn't look like URL/email, digits only
         return re.sub(r"\D", "", text)
 
 

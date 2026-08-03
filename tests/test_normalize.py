@@ -158,3 +158,42 @@ class TestNormalizeTextDefault:
         result = normalize_text("Café", ElementCategory.CHARACTER_NAME)
         # NFKC should normalize this
         assert "café" in result or "cafe" in result  # Both forms are valid after NFKC
+
+
+class TestNormalizeTextUrlWhitespaceHandling:
+    """Tests for Finding 2: URL/domain detection with internal whitespace (PDF artifacts)."""
+
+    def test_domain_with_internal_spaces_simple(self):
+        """Example . com (spaced domain) → example.com"""
+        result = normalize_text("Example . com", ElementCategory.PHONE_URL_EMAIL)
+        assert result == "example.com"
+
+    def test_domain_with_internal_spaces_www(self):
+        """www . example . com (spaced domain with www) → www.example.com"""
+        result = normalize_text("www . example . com", ElementCategory.PHONE_URL_EMAIL)
+        assert result == "www.example.com"
+
+    def test_phone_still_digits_only(self):
+        """(415) 867-5309 still normalizes to digits only"""
+        result = normalize_text("(415) 867-5309", ElementCategory.PHONE_URL_EMAIL)
+        assert result == "4158675309"
+
+    def test_international_phone_still_digits(self):
+        """+1 415.867.5309 still normalizes to digits only"""
+        result = normalize_text("+1 415.867.5309", ElementCategory.PHONE_URL_EMAIL)
+        assert result == "14158675309"
+
+    def test_email_with_internal_spaces(self):
+        """john . doe @ example . com → john.doe@example.com"""
+        result = normalize_text("john . doe @ example . com", ElementCategory.PHONE_URL_EMAIL)
+        assert result == "john.doe@example.com"
+
+    def test_no_letters_pure_number_spaces(self):
+        """Pure numbers with spaces (no letters) should be digits only"""
+        result = normalize_text("4 1 5 8 6 7 5 3 0 9", ElementCategory.PHONE_URL_EMAIL)
+        assert result == "4158675309"
+
+    def test_domain_with_subdomain_spaces(self):
+        """mail . google . com (spaced domain) → mail.google.com"""
+        result = normalize_text("mail . google . com", ElementCategory.PHONE_URL_EMAIL)
+        assert result == "mail.google.com"
