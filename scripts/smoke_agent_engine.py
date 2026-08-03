@@ -1,5 +1,7 @@
 """Query a deployed Agent Engine agent: uv run python scripts/smoke_agent_engine.py <id-or-resource-name> [message]"""
-import os, sys
+import os
+import sys
+
 import vertexai
 from dotenv import load_dotenv
 
