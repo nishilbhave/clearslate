@@ -26,6 +26,15 @@ ClearSlate automates script clearance. Upload a screenplay. Get back an itemized
 2. Configure: Copy `.env.example` to `.env` and fill in `PARALLEL_API_KEY`
 3. Run: `uv run uvicorn clearslate.api.app:app --port 8000`
 
+## Agent runtime modes
+
+`CLEARSLATE_AGENT_RUNTIME` selects how agents run, defaulting to `local`:
+
+- `local` — agents execute in-process via ADK's `Runner` + `InMemorySessionService` (`LocalAdkInvoker`). No deploy needed; this is the default for development.
+- `engine` — agents run on a deployed Vertex AI Agent Engine instance, queried over `vertexai.Client().agent_engines` (`AgentEngineInvoker`). Requires `CLEARSLATE_BREAKDOWN_ENGINE_ID` (set after `adk deploy agent_engine ... clearslate/agents/breakdown`) plus `GOOGLE_CLOUD_PROJECT`/`GOOGLE_CLOUD_LOCATION` in `.env`.
+
+Both modes speak the same `AgentInvoker` protocol, so the API/worker code is identical either way — only the env vars change.
+
 ## GCP bootstrap
 
 After Task 0.1 (see `.superpowers/sdd/2026-08-02-clearslate-hackathon-spec.md`):
