@@ -1,0 +1,411 @@
+{
+  "title": "The Comped Table",
+  "pages": 7,
+  "version": 1,
+  "plants": [
+    {
+      "plant_id": "P01",
+      "category": "character_name",
+      "surface_text": "Delia Voss",
+      "match_aliases": [
+        "DELIA VOSS",
+        "DELIA",
+        "Delia"
+      ],
+      "expected_pages": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "risk_intent": "clean_fictional",
+      "expected_grade": null,
+      "notes": "Protagonist, disgraced restaurant critic. Fully invented name; recurs across nearly the whole script (introduced p2, absent only p1)."
+    },
+    {
+      "plant_id": "P02",
+      "category": "character_name",
+      "surface_text": "Gareth Pemberton",
+      "match_aliases": [
+        "GARETH PEMBERTON",
+        "Gareth Pemberton",
+        "GARETH"
+      ],
+      "expected_pages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "risk_intent": "defamation_exposure",
+      "expected_grade": null,
+      "notes": "Villain, Ondine's owner. Invented-sounding but plausibly-real full name on the clearly unsympathetic character (fraud, bullying staff). Recurs across 6 of 7 pages; absent from the p7 epilogue."
+    },
+    {
+      "plant_id": "P03",
+      "category": "character_name",
+      "surface_text": "Maria Santos",
+      "match_aliases": [
+        "MARIA SANTOS",
+        "MARIA",
+        "Maria"
+      ],
+      "expected_pages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "risk_intent": "real_collision",
+      "expected_grade": null,
+      "notes": "Server/ally; a name thousands of real people share. Appears on every page (p3 hit is the MARIA (V.O.) dialogue cue carried over from the p2/p3 phone-call page break)."
+    },
+    {
+      "plant_id": "P04",
+      "category": "character_name",
+      "surface_text": "Jasper Coyne",
+      "match_aliases": [
+        "JASPER COYNE",
+        "JASPER",
+        "Jasper"
+      ],
+      "expected_pages": [
+        3,
+        4,
+        7
+      ],
+      "risk_intent": "clean_fictional",
+      "expected_grade": null,
+      "notes": "Ex-sous-chef ally, fully invented name. Only ever appears in the ALL-CAPS cue/action-intro form in this draft (no mixed-case instance exists in the text)."
+    },
+    {
+      "plant_id": "P05",
+      "category": "character_name",
+      "surface_text": "Otis Fenwick",
+      "match_aliases": [
+        "OTIS FENWICK",
+        "OTIS",
+        "Otis"
+      ],
+      "expected_pages": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "risk_intent": "clean_fictional",
+      "expected_grade": null,
+      "notes": "Minor character, busboy. Fully invented name."
+    },
+    {
+      "plant_id": "P06",
+      "category": "character_name",
+      "surface_text": "Bunny Choi",
+      "match_aliases": [
+        "BUNNY CHOI",
+        "BUNNY",
+        "Bunny"
+      ],
+      "expected_pages": [
+        1,
+        4,
+        6,
+        7
+      ],
+      "risk_intent": "clean_fictional",
+      "expected_grade": null,
+      "notes": "Minor character, sous chef. Fully invented name. The p7 hit is the 'BUNNY AND I ARE BUYING THE LEASE' text message."
+    },
+    {
+      "plant_id": "P07",
+      "category": "business_org",
+      "surface_text": "French Laundry",
+      "match_aliases": [
+        "French Laundry"
+      ],
+      "expected_pages": [
+        2
+      ],
+      "risk_intent": "real_entity",
+      "expected_grade": null,
+      "notes": "Real, genuinely famous restaurant (Yountville, CA), name-dropped once in dialogue as Delia's career highlight."
+    },
+    {
+      "plant_id": "P08",
+      "category": "business_org",
+      "surface_text": "Ondine",
+      "match_aliases": [
+        "Ondine",
+        "ONDINE"
+      ],
+      "expected_pages": [
+        1,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "risk_intent": "clean_fictional",
+      "expected_grade": null,
+      "notes": "The invented restaurant at the center of the plot. Recurs across 6 of 7 pages (absent only from p2's apartment scene)."
+    },
+    {
+      "plant_id": "P09",
+      "category": "business_org",
+      "surface_text": "St. Agnes Memorial Hospital",
+      "match_aliases": [
+        "St. Agnes Memorial Hospital"
+      ],
+      "expected_pages": [
+        7
+      ],
+      "risk_intent": "clean_fictional",
+      "expected_grade": null,
+      "notes": "Invented but real-sounding hospital; Delia mentions a stress stay there in the epilogue."
+    },
+    {
+      "plant_id": "P10",
+      "category": "location_address",
+      "surface_text": "1 Ferry Building",
+      "match_aliases": [
+        "1 Ferry Building",
+        "Ferry Building"
+      ],
+      "expected_pages": [
+        3,
+        4
+      ],
+      "risk_intent": "real_entity",
+      "expected_grade": null,
+      "notes": "Real San Francisco address/landmark (Ferry Building Marketplace); scene heading on p3, spoken address on p4."
+    },
+    {
+      "plant_id": "P11",
+      "category": "location_address",
+      "surface_text": "1147 Belmont Row",
+      "match_aliases": [
+        "1147 Belmont Row"
+      ],
+      "expected_pages": [
+        7
+      ],
+      "risk_intent": "clean_fictional",
+      "expected_grade": null,
+      "notes": "Fully invented street address for Delia's apartment, in the closing image."
+    },
+    {
+      "plant_id": "P12",
+      "category": "location_address",
+      "surface_text": "Golden Gate Bridge",
+      "match_aliases": [
+        "Golden Gate Bridge"
+      ],
+      "expected_pages": [
+        4
+      ],
+      "risk_intent": "real_entity",
+      "expected_grade": null,
+      "notes": "Real San Francisco landmark, named (not addressed) in an action line."
+    },
+    {
+      "plant_id": "P13",
+      "category": "phone_url_email",
+      "surface_text": "(415) 621-4487",
+      "match_aliases": [
+        "(415) 621-4487"
+      ],
+      "expected_pages": [
+        2
+      ],
+      "risk_intent": "code_rule_fail",
+      "expected_grade": null,
+      "notes": "Delia's phone number as dialed on-screen; realistic non-555 exchange, fails the safe-harbor phone rule."
+    },
+    {
+      "plant_id": "P14",
+      "category": "phone_url_email",
+      "surface_text": "(415) 555-0142",
+      "match_aliases": [
+        "(415) 555-0142"
+      ],
+      "expected_pages": [
+        7
+      ],
+      "risk_intent": "code_rule_pass",
+      "expected_grade": null,
+      "notes": "Two Spoons' new reservation line; 555-01xx block passes the safe-harbor phone rule cleanly."
+    },
+    {
+      "plant_id": "P15",
+      "category": "phone_url_email",
+      "surface_text": "delia.voss.eats@gmail.com",
+      "match_aliases": [
+        "delia.voss.eats@gmail.com"
+      ],
+      "expected_pages": [
+        7
+      ],
+      "risk_intent": "real_entity",
+      "expected_grade": null,
+      "notes": "Email shown on Delia's laptop screen, using the real, live gmail.com domain."
+    },
+    {
+      "plant_id": "P16",
+      "category": "product_brand",
+      "surface_text": "Olive Garden",
+      "match_aliases": [
+        "Olive Garden"
+      ],
+      "expected_pages": [
+        1
+      ],
+      "risk_intent": "defamation_exposure",
+      "expected_grade": null,
+      "notes": "Live, real trademark disparaged by name in Gareth's dialogue (mocking their ad slogan and breadsticks) -- the defamation-exposure demo for brands."
+    },
+    {
+      "plant_id": "P17",
+      "category": "product_brand",
+      "surface_text": "Sysco",
+      "match_aliases": [
+        "Sysco",
+        "SYSCO"
+      ],
+      "expected_pages": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "risk_intent": "real_entity",
+      "expected_grade": null,
+      "notes": "Real food-distribution brand used as an incidental factual prop (the truth behind Gareth's 'Hokkaido' lie), not itself insulted in dialogue. Recurs heavily as the plot's central evidence."
+    },
+    {
+      "plant_id": "P18",
+      "category": "product_brand",
+      "surface_text": "Chateau Larkspur",
+      "match_aliases": [
+        "Chateau Larkspur"
+      ],
+      "expected_pages": [
+        5
+      ],
+      "risk_intent": "clean_fictional",
+      "expected_grade": null,
+      "notes": "Fully invented wine label mentioned on the wine list."
+    },
+    {
+      "plant_id": "P19",
+      "category": "referenced_work",
+      "surface_text": "My Way",
+      "match_aliases": [
+        "My Way"
+      ],
+      "expected_pages": [
+        6
+      ],
+      "risk_intent": "real_entity",
+      "expected_grade": null,
+      "notes": "Real Sinatra song, needle-dropped over the restaurant speakers as Gareth flees."
+    },
+    {
+      "plant_id": "P20",
+      "category": "referenced_work",
+      "surface_text": "Ratatouille",
+      "match_aliases": [
+        "Ratatouille"
+      ],
+      "expected_pages": [
+        3
+      ],
+      "risk_intent": "real_entity",
+      "expected_grade": null,
+      "notes": "Real film, referenced by title in Delia's self-deprecating joke."
+    },
+    {
+      "plant_id": "P21",
+      "category": "real_person",
+      "surface_text": "Gordon Ramsay",
+      "match_aliases": [
+        "Gordon Ramsay",
+        "Ramsay"
+      ],
+      "expected_pages": [
+        4
+      ],
+      "risk_intent": "real_entity",
+      "expected_grade": null,
+      "notes": "Living celebrity chef, named only in dialogue (never appears as a character)."
+    },
+    {
+      "plant_id": "P22",
+      "category": "real_person",
+      "surface_text": "Julia Child",
+      "match_aliases": [
+        "Julia Child"
+      ],
+      "expected_pages": [
+        3
+      ],
+      "risk_intent": "real_entity",
+      "expected_grade": null,
+      "notes": "Historical (deceased) culinary figure, quoted/referenced in dialogue."
+    },
+    {
+      "plant_id": "P23",
+      "category": "on_screen_text",
+      "surface_text": "ONDINE storefront sign",
+      "match_aliases": [
+        "TASTING MENU NIGHTLY, RESERVATIONS ONLY",
+        "ONDINE -- TASTING MENU NIGHTLY"
+      ],
+      "expected_pages": [
+        1
+      ],
+      "risk_intent": "clean_fictional",
+      "expected_grade": null,
+      "notes": "All-caps signage text rendered as on-screen text in the opening action line."
+    },
+    {
+      "plant_id": "P24",
+      "category": "on_screen_text",
+      "surface_text": "THE BAY CITY REGISTER headline",
+      "match_aliases": [
+        "THE BAY CITY REGISTER",
+        "CRITIC UNMASKED: VOSS EXPOSED AS FRAUD",
+        "VOSS VINDICATED: ONDINE OWNER FACES FRAUD INQUIRY"
+      ],
+      "expected_pages": [
+        2,
+        7
+      ],
+      "risk_intent": "clean_fictional",
+      "expected_grade": null,
+      "notes": "Invented newspaper's masthead recurs as an on-screen INSERT for the before (p2) and after (p7) headlines pinned to Delia's corkboard."
+    },
+    {
+      "plant_id": "P25",
+      "category": "vehicle_identifier",
+      "surface_text": "G-R-V-Y-T-R-N",
+      "match_aliases": [
+        "G-R-V-Y-T-R-N"
+      ],
+      "expected_pages": [
+        6
+      ],
+      "risk_intent": "clean_fictional",
+      "expected_grade": null,
+      "notes": "Gareth's vanity license plate ('gravy train'), read aloud letter-by-letter by Otis."
+    }
+  ]
+}
