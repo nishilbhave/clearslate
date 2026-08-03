@@ -2,7 +2,12 @@
 Tests for cost estimation module.
 Spec 1.10: page heuristic + per-category element pricing under spec caps.
 """
-from clearslate.costs import estimate_cost, estimate_from_pages
+from clearslate.costs import (
+    SEARCH_PRICE_USD,
+    TASK_BASE_PRICE_USD,
+    estimate_cost,
+    estimate_from_pages,
+)
 from clearslate.models import ElementCategory
 
 
@@ -33,8 +38,8 @@ def test_estimate_cost_pinned_numbers():
     gemini_in = 100 * 350
     gemini_out = 0.6 * gemini_in
     expected_gemini_usd = round((gemini_in * 0.30 + gemini_out * 2.50) / 1_000_000, 4)
-    # parallel_usd = round(83*0.005 + 6*0.02, 4)
-    expected_parallel_usd = round(83 * 0.005 + 6 * 0.02, 4)
+    # parallel_usd = round(83*SEARCH_PRICE_USD + 6*TASK_BASE_PRICE_USD, 4)
+    expected_parallel_usd = round(83 * SEARCH_PRICE_USD + 6 * TASK_BASE_PRICE_USD, 4)
     expected_total_usd = round(expected_gemini_usd + expected_parallel_usd, 4)
 
     assert estimate.gemini_usd == expected_gemini_usd
@@ -47,21 +52,12 @@ def test_estimate_cost_pinned_numbers():
 
 
 def test_estimate_from_pages_130_pages_under_2_dollars():
-    """Spec target: 130-page estimate total_usd < $2.00.
-
-    Note: Due to rounding in element distribution, actual cost is ~$2.10.
-    Using round() per spec causes fractional loss (207 elements from 208 target),
-    and the AVERAGE_MIX proportions result in higher search/task density than ideal.
-    Keeping test threshold at < $2.15 (7.5% above target) as acceptable tolerance.
-    """
+    """Spec target: 130-page estimate total_usd < $2.00."""
     estimate = estimate_from_pages(130)
 
-    # Spec target is $2.00, but rounding effects push it to ~$2.11
-    assert estimate.total_usd < 2.15, (
-        f"130-page estimate should approximate $2.00 target, got ${estimate.total_usd}"
+    assert estimate.total_usd < 2.0, (
+        f"130-page estimate must be < $2.00, got ${estimate.total_usd}"
     )
-    # Verify it's in reasonable range
-    assert 2.0 < estimate.total_usd < 2.15
 
     # Verify basis
     assert estimate.basis == "pages"
