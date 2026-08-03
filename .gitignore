@@ -1,0 +1,12 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+node_modules/
+frontend/dist/
+.DS_Store
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+2026-08-02-clearslate-hackathon-spec.md
+.superpowers/
