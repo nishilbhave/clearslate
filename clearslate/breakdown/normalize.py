@@ -1,0 +1,108 @@
+"""Text normalization for clearance elements."""
+import re
+import unicodedata
+
+from clearslate.models import ElementCategory
+
+
+def normalize_text(text: str, category: ElementCategory) -> str:
+    """
+    Normalize text based on category.
+
+    Args:
+        text: The text to normalize
+        category: The ElementCategory to apply category-specific normalization
+
+    Returns:
+        Normalized text
+
+    Examples:
+        >>> normalize_text("The Blue Duck Tavern", ElementCategory.BUSINESS_ORG)
+        "blue duck tavern"
+        >>> normalize_text("(415) 867-5309", ElementCategory.PHONE_URL_EMAIL)
+        "4158675309"
+        >>> normalize_text("Example.COM/", ElementCategory.PHONE_URL_EMAIL)
+        "example.com"
+    """
+    if category == ElementCategory.PHONE_URL_EMAIL:
+        return _normalize_phone_url_email(text)
+    else:
+        return _normalize_default(text)
+
+
+def _normalize_phone_url_email(text: str) -> str:
+    """
+    Normalize PHONE_URL_EMAIL category.
+
+    For emails/URLs (contains "@" or looks like domain with "."):
+    - lowercase, strip whitespace, strip single trailing "/"
+
+    For phones: strip all non-digit characters -> digits only
+    """
+    text = text.strip()
+
+    # Check if it's an email or URL
+    is_email = "@" in text
+    is_url = text.startswith(("http://", "https://"))
+
+    # Domain detection: has dot with letters around it, no spaces after strip
+    is_domain = False
+    if "." in text and " " not in text:
+        # Check if there are letters around a dot
+        parts = text.split(".")
+        if len(parts) >= 2:
+            # Check if any part has letters (typical for domain names)
+            is_domain = any(any(c.isalpha() for c in part) for part in parts)
+
+    if is_email or is_url or is_domain:
+        # Email or URL: lowercase, strip whitespace, strip single trailing "/"
+        normalized = text.lower().replace(" ", "")
+        normalized = normalized.removesuffix("/")
+        return normalized
+    else:
+        # Phone: digits only
+        return re.sub(r"\D", "", text)
+
+
+def _normalize_default(text: str) -> str:
+    """
+    Normalize default category (all categories except PHONE_URL_EMAIL).
+
+    Steps:
+    1. NFKC normalization
+    2. Explicitly replace U+2019 (curly apostrophe) with ASCII apostrophe
+    3. casefold()
+    4. Remove punctuation except word chars, spaces, &, ', -
+    5. Collapse whitespace runs to single space
+    6. Strip leading/trailing whitespace
+    7. Drop ONE leading article (the/a/an)
+    """
+    # Step 1: NFKC normalization
+    text = unicodedata.normalize("NFKC", text)
+
+    # Step 2: Explicitly replace curly apostrophe with ASCII apostrophe
+    text = text.replace("’", "'")
+
+    # Step 3: casefold for case-insensitive comparison
+    text = text.casefold()
+
+    # Step 4: Remove punctuation except word chars, spaces, &, ', -
+    # \w includes letters, digits, underscore; we want to keep those, spaces, &, ', -
+    # Remove everything else: [^\w\s&'-]
+    text = re.sub(r"[^\w\s&'-]", "", text)
+
+    # Step 5: Collapse whitespace runs to single space
+    text = re.sub(r"\s+", " ", text)
+
+    # Step 6: Strip leading/trailing whitespace
+    text = text.strip()
+
+    # Step 7: Drop ONE leading article (the/a/an)
+    if text.startswith("the "):
+        text = text[4:]
+    elif text.startswith("a "):
+        text = text[2:]
+    elif text.startswith("an "):
+        text = text[3:]
+
+    return text
