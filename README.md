@@ -1,5 +1,7 @@
 # ClearSlate
 
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+
 Upload a screenplay, get a cited E&O-style clearance report in minutes.
 
 ## The problem
