@@ -1,4 +1,7 @@
+import os
+
 from google.adk.agents import LlmAgent
+from google.adk.models import Gemini
 
 from .schema import ChunkExtraction
 
@@ -29,9 +32,21 @@ Rules:
   with all pages where it appears in this excerpt.
 - Output JSON matching the schema. Nothing else."""
 
+# Env-overridable so an Agent Engine deploy or eval run can pin a specific model
+# without a code change. This directory must stay self-contained (no clearslate.config
+# import) for Agent Engine packaging, so both knobs are read from the environment here.
+_MODEL_ID = os.environ.get("CLEARSLATE_BREAKDOWN_MODEL", "gemini-3.6-flash")
+
+# gemini-3.6-flash (as of 2026-08) is only served on Vertex AI's "global" endpoint —
+# regional endpoints like us-central1 404 on it even though gemini-2.5-flash works on
+# both. This is independent of GOOGLE_CLOUD_LOCATION, which controls where the Agent
+# Engine deployment itself lives (clearslate/config.py Settings.location), not where
+# the underlying Gemini inference call is served, so it gets its own env var here.
+_MODEL_LOCATION = os.environ.get("CLEARSLATE_BREAKDOWN_MODEL_LOCATION", "global")
+
 root_agent = LlmAgent(
     name="breakdown_agent",
-    model="gemini-2.5-flash",
+    model=Gemini(model=_MODEL_ID, client_kwargs={"location": _MODEL_LOCATION}),
     description="Extracts a typed clearance-element inventory from screenplay text.",
     instruction=INSTRUCTION,
     output_schema=ChunkExtraction,

@@ -11,7 +11,7 @@ load_dotenv()
 class Settings:
     project: str = os.environ.get("GOOGLE_CLOUD_PROJECT", "")
     location: str = os.environ.get("GOOGLE_CLOUD_LOCATION", "us-central1")
-    breakdown_model: str = os.environ.get("CLEARSLATE_BREAKDOWN_MODEL", "gemini-2.5-flash")
+    breakdown_model: str = os.environ.get("CLEARSLATE_BREAKDOWN_MODEL", "gemini-3.6-flash")
     agent_runtime: str = os.environ.get("CLEARSLATE_AGENT_RUNTIME", "local")  # local | engine
     breakdown_engine_id: str = os.environ.get("CLEARSLATE_BREAKDOWN_ENGINE_ID", "")
     max_pages: int = 130
