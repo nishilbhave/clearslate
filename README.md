@@ -45,6 +45,8 @@ BILLING_ACCOUNT_ID=your-billing-account-id \
 scripts/bootstrap_gcp.sh
 ```
 
+The web app (API + built frontend, containerized via the root `Dockerfile`) deploys to Cloud Run with `gcloud run deploy clearslate-web --source . --project=$PROJECT_ID --region=us-central1 --service-account=clearslate-run@$PROJECT_ID.iam.gserviceaccount.com --set-secrets=PARALLEL_API_KEY=parallel-api-key:latest` (see `.superpowers/sdd/.../task-1.15-brief.md` for the full flag set). Run state is in-memory until Phase 2 adds Firestore persistence — a service restart loses in-flight runs (acceptable for Phase 1).
+
 ## Disclaimer
 
 ClearSlate produces a research report, not legal advice or a legal opinion.

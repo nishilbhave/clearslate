@@ -1,0 +1,17 @@
+.venv
+.git
+.superpowers
+.env
+.env.example
+2026-08-02-clearslate-hackathon-spec.md
+tests
+scripts
+node_modules
+frontend/node_modules
+frontend/dist
+__pycache__
+*.pyc
+.pytest_cache
+.ruff_cache
+.DS_Store
+.github
