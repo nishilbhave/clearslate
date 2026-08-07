@@ -3,6 +3,7 @@ from pathlib import Path
 
 import pytest
 
+from clearslate.config import settings
 from clearslate.errors import ParserError
 from clearslate.parsing.router import parse_upload
 
@@ -57,18 +58,20 @@ def test_no_args_raises_empty_input() -> None:
     assert "Provide a script file or pasted text" in exc_info.value.message
 
 
-def test_131_page_paste_raises_too_long() -> None:
-    """Test that exceeding 130 page limit raises too_long error."""
-    # Create text that will result in > 130 pages
-    # 131 pages = 131 * 55 = 7205 lines, but splitting adds empty string so we need to
-    # account for that
-    long_text = "line\n" * (131 * 55)
+def test_over_page_limit_paste_raises_too_long() -> None:
+    """Test that exceeding the page limit raises too_long error.
+
+    Sized off `settings.max_pages` rather than a literal so the test keeps exercising the
+    limit when the cap moves, instead of silently sitting under the new one.
+    """
+    over_limit_pages = settings.max_pages + 1
+    long_text = "line\n" * (over_limit_pages * 55)
 
     with pytest.raises(ParserError) as exc_info:
         parse_upload(pasted_text=long_text)
 
     assert exc_info.value.code == "too_long"
-    assert "130" in exc_info.value.message
+    assert str(settings.max_pages) in exc_info.value.message
 
 
 def test_invalid_utf8_raises_bad_encoding() -> None:

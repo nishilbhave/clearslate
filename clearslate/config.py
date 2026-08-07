@@ -14,7 +14,7 @@ class Settings:
     breakdown_model: str = os.environ.get("CLEARSLATE_BREAKDOWN_MODEL", "gemini-3.6-flash")
     agent_runtime: str = os.environ.get("CLEARSLATE_AGENT_RUNTIME", "local")  # local | engine
     breakdown_engine_id: str = os.environ.get("CLEARSLATE_BREAKDOWN_ENGINE_ID", "")
-    max_pages: int = 130
+    max_pages: int = 180
     chunk_pages: int = 12
     chunk_overlap: int = 2
     max_researched_elements: int = 250   # spec cost guard, enforced Phase 2

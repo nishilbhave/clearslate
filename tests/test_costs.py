@@ -2,7 +2,9 @@
 Tests for cost estimation module.
 Spec 1.10: page heuristic + per-category element pricing under spec caps.
 """
+from clearslate.config import settings
 from clearslate.costs import (
+    ELEMENTS_PER_PAGE,
     GEMINI_FLASH_USD_PER_M_IN,
     GEMINI_FLASH_USD_PER_M_OUT,
     SEARCH_PRICE_USD,
@@ -61,19 +63,23 @@ def test_estimate_cost_pinned_numbers():
     assert estimate.element_count == 50  # 30 + 10 + 10
 
 
-def test_estimate_from_pages_130_pages_under_2_dollars():
-    """Spec target: 130-page estimate total_usd < $2.00."""
-    estimate = estimate_from_pages(130)
+def test_estimate_at_max_pages_under_2_dollars():
+    """Spec target: a full-length script at the page cap estimates under $2.00.
+
+    Tracks `settings.max_pages` rather than a literal so raising the cap re-checks the
+    spec's cost ceiling instead of silently continuing to assert the old limit.
+    """
+    estimate = estimate_from_pages(settings.max_pages)
 
     assert estimate.total_usd < 2.0, (
-        f"130-page estimate must be < $2.00, got ${estimate.total_usd}"
+        f"{settings.max_pages}-page estimate must be < $2.00, got ${estimate.total_usd}"
     )
 
     # Verify basis
     assert estimate.basis == "pages"
 
-    # Verify element_count calculation: int(130 * 1.6) = 208
-    expected_element_count = int(130 * 1.6)
+    # Verify element_count calculation
+    expected_element_count = int(settings.max_pages * ELEMENTS_PER_PAGE)
     assert estimate.element_count == expected_element_count
 
 

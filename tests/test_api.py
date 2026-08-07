@@ -8,6 +8,7 @@ from httpx import ASGITransport, AsyncClient
 
 from clearslate.agents.invoker import QueuedInvoker
 from clearslate.api.app import create_app
+from clearslate.config import settings
 from clearslate.store.memory import InMemoryRunStore
 
 FOUNTAIN_TEXT = """INT. KITCHENS - DAY
@@ -120,9 +121,9 @@ async def test_post_neither_file_nor_text_returns_422_empty_input():
     assert resp.json()["detail"]["code"] == "empty_input"
 
 
-async def test_post_131_page_paste_returns_413():
+async def test_post_over_page_limit_paste_returns_413():
     app = create_app(store=InMemoryRunStore(), invoker=QueuedInvoker([]))
-    long_text = "line\n" * (131 * 55)
+    long_text = "line\n" * ((settings.max_pages + 1) * 55)
 
     async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
         resp = await client.post("/api/runs", data={"text": long_text})

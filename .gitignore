@@ -10,3 +10,5 @@ frontend/dist/
 .ruff_cache/
 2026-08-02-clearslate-hackathon-spec.md
 .superpowers/
+.scale-test/
+tests/fixtures/local/
